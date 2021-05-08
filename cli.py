@@ -27,7 +27,7 @@ def run():
         print()
 
     for tag, notes in notes_per_tag.items():
-        print(create_index(tag, notes), '\n\n')
+        print(create_index(tag, notes), "\n\n")
 
     print(create_index("untagged notes", notes_untagged))
 

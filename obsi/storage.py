@@ -22,7 +22,7 @@ class Note:
     def get_title(self):
         # todo md title
         # todo frontmatter title
-        return self._path.name.replace('.md', '')
+        return self._path.name.replace(".md", "")
 
     tags = property(get_tags)
     path = property(get_path)
