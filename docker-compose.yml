@@ -8,3 +8,4 @@ services:
     restart: always
     volumes:
     - ./:/code/
+    - ~/Documents/notes/:/notes/
