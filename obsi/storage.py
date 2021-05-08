@@ -19,8 +19,14 @@ class Note:
     def get_path(self):
         return self._path
 
+    def get_title(self):
+        # todo md title
+        # todo frontmatter title
+        return self._path.name.replace('.md', '')
+
     tags = property(get_tags)
     path = property(get_path)
+    title = property(get_title)
 
     def __repr__(self):
         return f"Note({self.path=})"

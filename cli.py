@@ -2,6 +2,7 @@ from collections import defaultdict
 
 import click
 
+from obsi.markdown import create_index
 from obsi.storage import gen_notes
 
 
@@ -26,14 +27,9 @@ def run():
         print()
 
     for tag, notes in notes_per_tag.items():
-        print(tag)
-        for note in notes:
-            print(f"- {note}")
-        print()
+        print(create_index(tag, notes), '\n\n')
 
-    print('untagged notes')
-    for note in notes_untagged:
-        print(f"- {note}")
+    print(create_index("untagged notes", notes_untagged))
 
 
 if __name__ == "__main__":
