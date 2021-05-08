@@ -1,0 +1,13 @@
+# toolchain
+black
+isort
+flake8
+pip-tools
+pylint
+pytest
+pytest-cov
+
+# app
+click
+scikit-learn
+pandas
