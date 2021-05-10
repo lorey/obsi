@@ -1,4 +1,5 @@
 from collections import defaultdict
+from pathlib import Path
 
 import click
 
@@ -15,8 +16,10 @@ def cli():
 
 @cli.command()
 def run():
-    for index in generate_indexes():
-        print(index, "\n\n")
+    for filename, content in generate_indexes():
+        path = Path("out/").joinpath(filename)
+        with path.open("w") as file:
+            file.write(content)
 
 
 def generate_indexes(untagged_index=True):
@@ -34,10 +37,11 @@ def generate_indexes(untagged_index=True):
         print()
 
     for tag, notes in notes_per_tag.items():
-        yield create_index(tag, notes)
+        filename = "index-" + tag.lower().replace("#", "")
+        yield filename, create_index(tag, notes)
 
     if untagged_index:
-        yield create_index("untagged notes", notes_untagged)
+        yield "index-untagged", create_index("untagged notes", notes_untagged)
 
 
 if __name__ == "__main__":
