@@ -14,7 +14,7 @@ class Note:
 
     def get_tags(self):
         results = re.findall(r"#[A-z0-9]+", self.content)
-        return results
+        return set(results)
 
     def get_path(self):
         return self._path
