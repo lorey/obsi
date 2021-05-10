@@ -1,6 +1,12 @@
+from jinja2 import Environment, PackageLoader
+
+
 def create_index(title, notes):
     """creates an index of notes"""
-    content_rows = [f"# {title}", ""]
-    for note in sorted(notes, key=lambda n: n.title):
-        content_rows.append(f"- [{note.title}]({note.path})")
-    return "\n".join(content_rows)
+    env = get_jinja_env()
+    index_template = env.get_template("index.md")
+    return index_template.render(title=title, notes=notes)
+
+
+def get_jinja_env():
+    return Environment(loader=PackageLoader("obsi", "templates"))

@@ -9,4 +9,4 @@ pytest-cov
 
 # app
 click
-# jinja2
+jinja2
