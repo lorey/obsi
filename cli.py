@@ -1,9 +1,12 @@
+import logging
 from collections import defaultdict
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import click
 
-from obsi.markdown import create_index, create_note_list
+from obsi import markdown
+from obsi.markdown import create_day, create_index, create_note_list
 from obsi.ml import generate_tag_recommendations
 from obsi.storage import gen_notes
 
@@ -17,20 +20,39 @@ def cli():
 
 @cli.command()
 def run():
+    update_days()
+    update_recommendations()
+    update_indexes()
+
+
+def update_days():
+    for i in range(-100, 100):
+        date = (datetime.now() + timedelta(days=i)).date()
+        content = create_day(date)
+        day_path = Path("out/calendar/days/" + date.strftime(markdown.DAY_FORMAT))
+        if not day_path.is_file():
+            day_path.parent.mkdir(parents=True, exist_ok=True)
+            with day_path.open("w") as file:
+                logging.info(f"generate {day_path}")
+                file.write(content)
+        else:
+            logging.warning(f"{day_path} already exists, skipping")
+
+
+def update_recommendations():
     notes = list(gen_notes(NOTES_PATH))
     for tag, notes_rec in generate_tag_recommendations(notes):
         content = create_note_list(tag, notes_rec)
         with open("out/recommendations-" + tag.lower().replace("#", ""), "w") as file:
+            logging.info(f"generate recommendations for {tag}")
             file.write(content)
-        print(tag)
-        print(notes_rec, "\n\n")
-    # update_indexes()
 
 
 def update_indexes():
     for filename, content in generate_indexes():
         path = Path("out/").joinpath(filename)
         with path.open("w") as file:
+            logging.info("generate index {filename}")
             file.write(content)
 
 
@@ -57,4 +79,5 @@ def generate_indexes(untagged_index=True):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     cli()
