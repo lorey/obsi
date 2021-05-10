@@ -3,7 +3,8 @@ from pathlib import Path
 
 import click
 
-from obsi.markdown import create_index
+from obsi.markdown import create_index, create_note_list
+from obsi.ml import generate_tag_recommendations
 from obsi.storage import gen_notes
 
 NOTES_PATH = "/notes/"
@@ -16,6 +17,17 @@ def cli():
 
 @cli.command()
 def run():
+    notes = list(gen_notes(NOTES_PATH))
+    for tag, notes_rec in generate_tag_recommendations(notes):
+        content = create_note_list(tag, notes_rec)
+        with open("out/recommendations-" + tag.lower().replace("#", ""), "w") as file:
+            file.write(content)
+        print(tag)
+        print(notes_rec, "\n\n")
+    # update_indexes()
+
+
+def update_indexes():
     for filename, content in generate_indexes():
         path = Path("out/").joinpath(filename)
         with path.open("w") as file:

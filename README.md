@@ -4,10 +4,11 @@ automating tasks related to my markdown-based [Obsidian](https://obsidian.md) no
 
 # Features
 - tag index generation: creating pages that list all usages of a specific tag
+- ml-based tag recommendations (based on other tags)
 
 ## Upcoming Features
 - generation of calendar
-- suggest tags (content-based, tag-based, link-based)
+- suggest tags (content-based, link-based)
 - find missing tags (e.g. by folder structure)
 - spaced repetition
 - list tags

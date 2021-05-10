@@ -10,3 +10,5 @@ pytest-cov
 # app
 click
 jinja2
+pandas
+scikit-learn
