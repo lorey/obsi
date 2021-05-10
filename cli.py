@@ -13,11 +13,11 @@ def cli():
 
 @cli.command()
 def run():
-    notes_per_tag = defaultdict(list)
+    notes_per_tag = defaultdict(set)
     notes_untagged = []
     for note in gen_notes("/notes/"):
         for tag in note.tags:
-            notes_per_tag[tag].append(note)
+            notes_per_tag[tag].add(note)
 
         if not note.tags:
             notes_untagged.append(note)
