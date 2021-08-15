@@ -8,6 +8,7 @@ automating tasks related to my markdown-based [Obsidian](https://obsidian.md) no
 - generation of daily notes (containing link to yesterday, tomorrow, and month)
 
 ## Upcoming Features
+- automated git commits
 - generation of full calendar (days, months, years)
 - suggest tags (content-based, link-based)
 - find missing tags (e.g. by folder structure)
