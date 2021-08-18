@@ -1,6 +1,7 @@
 import datetime
+from pathlib import Path
 
-from jinja2 import Environment, PackageLoader
+from jinja2 import Environment, FileSystemLoader
 
 DAY_FORMAT = "%Y-%m-%d"
 MONTH_FORMAT = "%Y-%m"
@@ -38,5 +39,8 @@ def create_day(date: datetime.date):
     )
 
 
-def get_jinja_env():
-    return Environment(loader=PackageLoader("obsi", "templates"))
+def get_jinja_env(template_path_raw="templates"):
+    template_path = Path(template_path_raw)
+    if not template_path.is_dir():
+        raise RuntimeError(f"Template directory not found: {template_path}")
+    return Environment(loader=FileSystemLoader(template_path))
