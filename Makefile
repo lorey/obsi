@@ -3,7 +3,7 @@
 .PHONY: all test format build up run precommit
 .FORCE:
 
-all: test format precommit
+all: up test format precommit
 
 run:
 > docker-compose exec app python cli.py run
