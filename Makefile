@@ -3,7 +3,7 @@
 .PHONY: all test format build up run precommit
 .FORCE:
 
-all: up test format precommit
+all: build up test format precommit
 
 run:
 > docker-compose exec app python cli.py run
@@ -27,7 +27,7 @@ lint:
 > @docker-compose exec app pylint obsi || true
 
 build: requirements.txt
-> docker-compose build
+> docker-compose build --build-arg USER_ID=$$(id -u) --build-arg GROUP_ID=$$(id -g)
 
 # update requirements
 requirements.txt: requirements.in
