@@ -1,11 +1,18 @@
-# OBSI - CLI helpers for markdown-based knowledge base
-This is my dockerized CLI app called `obsi` 
-automating tasks related to my markdown-based [Obsidian](https://obsidian.md) notes.
+# CLI for markdown-based knowledge bases
+This is my command-line tool for markdown-based knowledge bases called `obsi`.
+I use with my markdown-based [Obsidian](https://obsidian.md) notes.
 
-# Features
-- tag index generation: creating pages that list all usages of a specific tag
-- ml-based tag recommendations (based on other tags)
-- generation of daily notes (containing link to yesterday, tomorrow, and month)
+## Features
+- index generation for tags: create pages that list all usages of a specific tag
+- tag recommendations (based on other tags) with machine learning
+- generation of calendar-related notes: daily, weekly, and monthly notes with respective links
+
+## Usage
+1. Fork and clone this repo
+2. Adapt the [templates](templates) to your needs
+3. Adapt the location of your notes in [docker-compose.yml](docker-compose.yml).
+4. Spin it up with `make`. This will spin up a docker container.
+5. Run with `make run`, this will generate everything in the `out/` directory.
 
 ## Upcoming Features
 - scheduling of tasks/hooks
