@@ -3,8 +3,9 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
-DAY_FORMAT = "%Y-%m-%d"
-MONTH_FORMAT = "%Y-%m"
+from obsi import DAY_FORMAT, MONTH_FORMAT
+from obsi.storage import day_date_to_path, day_date_to_week_path
+from obsi.util import get_days_in_same_week
 
 
 def create_index(title, notes):
@@ -22,9 +23,6 @@ def create_note_list(title, notes):
 
 
 def create_day(date: datetime.date):
-    def day_date_to_path(day):
-        return "calendar/days/" + day.strftime(DAY_FORMAT)
-
     env = get_jinja_env()
     template = env.get_template("day.md")
 
@@ -35,8 +33,18 @@ def create_day(date: datetime.date):
         title=date.strftime(DAY_FORMAT),
         yesterday_path=day_date_to_path(yesterday),
         tomorrow_path=day_date_to_path(tomorrow),
+        week_path=day_date_to_week_path(date),
         month_path=f"calendar/months/{date.strftime(MONTH_FORMAT)}",
     )
+
+
+def create_week(date: datetime.date):
+    env = get_jinja_env()
+    template = env.get_template("week.md")
+
+    days = get_days_in_same_week(date)
+    day_links = {d.strftime("%A, " + DAY_FORMAT): day_date_to_path(d) for d in days}
+    return template.render(day_links=day_links)
 
 
 def get_jinja_env(template_path_raw="templates"):

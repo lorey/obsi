@@ -1,6 +1,9 @@
 import re
 from pathlib import Path
 
+from obsi import DAY_FORMAT
+from obsi.util import week_identifier_from_date
+
 
 class Note:
     @classmethod
@@ -47,3 +50,11 @@ def path_to_content(path):
     with path.open() as file:
         content = file.read()
     return content
+
+
+def day_date_to_path(day):
+    return "calendar/days/" + day.strftime(DAY_FORMAT)
+
+
+def day_date_to_week_path(day):
+    return "calendar/weeks/" + week_identifier_from_date(day)

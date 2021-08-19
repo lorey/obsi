@@ -5,10 +5,12 @@ from pathlib import Path
 
 import click
 
-from obsi import markdown
-from obsi.markdown import create_day, create_index, create_note_list
+from obsi.markdown import create_day, create_index, create_note_list, create_week
 from obsi.ml import generate_tag_recommendations
-from obsi.storage import gen_notes
+from obsi.storage import day_date_to_path, day_date_to_week_path, gen_notes
+
+DAY_GENERATION_PADDING = 100
+WEEK_GENERATION_PADDING = 52
 
 NOTES_PATH = "/notes/"
 
@@ -21,15 +23,20 @@ def cli():
 @cli.command()
 def run():
     update_days()
+    update_weeks()
     update_recommendations()
     update_indexes()
 
 
-def update_days():
-    for i in range(-100, 100):
+def update_days(padding=DAY_GENERATION_PADDING):
+    """
+    Generates all days for the given padding.
+    :param padding: generate n days behind and ahead of current date.
+    """
+    for i in range(-padding, padding):
         date = (datetime.now() + timedelta(days=i)).date()
         content = create_day(date)
-        day_path = Path("out/calendar/days/" + date.strftime(markdown.DAY_FORMAT))
+        day_path = Path("out").joinpath(day_date_to_path(date))
         if not day_path.is_file():
             day_path.parent.mkdir(parents=True, exist_ok=True)
             with day_path.open("w") as file:
@@ -37,6 +44,24 @@ def update_days():
                 file.write(content)
         else:
             logging.warning(f"{day_path} already exists, skipping")
+
+
+def update_weeks(padding=WEEK_GENERATION_PADDING):
+    """
+    Generate weeks for the given padding.
+    :param padding: generate n weeks around current date.
+    """
+    for i in range(-padding, padding):
+        date = (datetime.now() + timedelta(weeks=i)).date()
+        content = create_week(date)
+        week_path = Path("out").joinpath(day_date_to_week_path(date))
+        if not week_path.is_file():
+            week_path.parent.mkdir(parents=True, exist_ok=True)
+            with week_path.open("w") as file:
+                logging.info(f"generate {week_path}")
+                file.write(content)
+        else:
+            logging.warning(f"{week_path} already exists, skipping")
 
 
 def update_recommendations():
@@ -52,7 +77,7 @@ def update_indexes():
     for filename, content in generate_indexes():
         path = Path("out/").joinpath(filename)
         with path.open("w") as file:
-            logging.info("generate index {filename}")
+            logging.info(f"generate index {filename}")
             file.write(content)
 
 
