@@ -14,7 +14,8 @@ I use with my markdown-based [Obsidian](https://obsidian.md) notes.
 4. Spin it up with `make`. This will spin up a docker container.
 5. Run with `make run`, this will generate everything in the `out/` directory.
 
-## Upcoming Features
+## Feature Ideas
+- Search Index
 - scheduling of tasks/hooks
 - automated git commits
 - generation of full calendar (days, months, years)
