@@ -2,6 +2,7 @@
 This is `obsi`, a command-line tool to supercharge markdown-based knowledge bases.
 Originally used for markdown-based [Obsidian](https://obsidian.md) notes,
 it works with every markdown-based tool for note-taking or digital gardening.
+Examples of generated files from an exemplary vault can be found in the [example](example) directory.
 
 ## Features
 - create Anki Decks from your Obsidian Vault to memorize notes
