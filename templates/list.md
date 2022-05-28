@@ -1,5 +1,5 @@
 # {{ title }}
 
 {% for note in notes -%}
-- [{{ note.title }}]({{ note.path }})
+- [{{ note.title }}]({{ note.get_relative_path() }})
 {% endfor %}
