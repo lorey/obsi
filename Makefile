@@ -3,10 +3,11 @@
 .PHONY: all test format build up run precommit
 .FORCE:
 
-all: build up test format precommit
+all: build up run
 
 run:
 > docker-compose exec app python cli.py run
+> docker-compose exec app python cli.py anki-deck
 
 test:
 > docker-compose exec app python -m pytest

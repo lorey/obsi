@@ -11,6 +11,7 @@ class Vault:
     """
     An obsidian vault.
     """
+
     path = None
 
     def __init__(self, path: typing.Union[Path, str]):
@@ -31,6 +32,7 @@ class Note:
     """
     A markdown-based note.
     """
+
     @classmethod
     def from_path(cls, vault: Vault, path: Path):
         path_abs = vault.path.joinpath(path)

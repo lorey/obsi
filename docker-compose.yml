@@ -8,4 +8,5 @@ services:
     restart: always
     volumes:
     - ./:/code/
+    # change the part before the colon to your vault
     - ~/Documents/notes/:/notes/
