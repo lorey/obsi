@@ -10,7 +10,7 @@ it works with every markdown-based tool for note-taking or digital gardening.
 - generate calendar-related notes: daily, weekly, and monthly notes with respective links for the next years to come so you don't have to manually create notes for daily pages ever again
 
 while doing this, obsi is:
-- customizable with [templates](templates), so you can adapt everything to your needs
+- customizable with Jinja-based [templates](templates), so you can adapt everything to your needs
 - easily extendable with Python, if you need more functionality
 - fully containerized within Docker, no dependencies needed
 - super careful with your vault and will never overwrite anything
