@@ -3,6 +3,7 @@ This is my command-line tool for markdown-based knowledge bases called `obsi`.
 I use with my markdown-based [Obsidian](https://obsidian.md) notes.
 
 ## Features
+- generation of Anki Decks from your Obsidian Vault
 - index generation for tags: create pages that list all usages of a specific tag
 - tag recommendations (based on other tags) with machine learning
 - generation of calendar-related notes: daily, weekly, and monthly notes with respective links

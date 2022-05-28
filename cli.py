@@ -1,3 +1,7 @@
+"""
+obsi command line interface.
+"""
+
 import logging
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -5,9 +9,10 @@ from pathlib import Path
 
 import click
 
+from obsi.anki import generate_anki_deck
 from obsi.markdown import create_day, create_index, create_note_list, create_week
 from obsi.ml import generate_tag_recommendations
-from obsi.storage import day_date_to_path, day_date_to_week_path, gen_notes
+from obsi.storage import Vault, day_date_to_path, day_date_to_week_path
 
 DAY_GENERATION_PADDING = 100
 WEEK_GENERATION_PADDING = 52
@@ -26,6 +31,14 @@ def run():
     update_weeks()
     update_recommendations()
     update_indexes()
+
+
+@cli.command()
+def anki_deck():
+    name = f"Obsi notes for {NOTES_PATH}"
+    vault = Vault(NOTES_PATH)
+    notes = list(vault.generate_notes())
+    generate_anki_deck(name, notes, out_file="out/deck.apkg")
 
 
 def update_days(padding=DAY_GENERATION_PADDING):
@@ -65,7 +78,7 @@ def update_weeks(padding=WEEK_GENERATION_PADDING):
 
 
 def update_recommendations():
-    notes = list(gen_notes(NOTES_PATH))
+    notes = list(get_vault().generate_notes())
     for tag, notes_rec in generate_tag_recommendations(notes):
         content = create_note_list(tag, notes_rec)
         with open("out/recommendations-" + tag.lower().replace("#", ""), "w") as file:
@@ -84,7 +97,7 @@ def update_indexes():
 def generate_indexes(untagged_index=True):
     notes_per_tag = defaultdict(set)
     notes_untagged = []
-    for note in gen_notes(NOTES_PATH):
+    for note in get_vault().generate_notes():
         for tag in note.tags:
             notes_per_tag[tag].add(note)
 
@@ -101,6 +114,10 @@ def generate_indexes(untagged_index=True):
 
     if untagged_index:
         yield "index-untagged", create_index("untagged notes", notes_untagged)
+
+
+def get_vault():
+    return Vault(NOTES_PATH)
 
 
 if __name__ == "__main__":

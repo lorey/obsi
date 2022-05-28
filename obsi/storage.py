@@ -1,26 +1,60 @@
 import re
+import typing
 from pathlib import Path
+from urllib.parse import urlencode
 
 from obsi import DAY_FORMAT
 from obsi.util import week_identifier_from_date
 
 
-class Note:
-    @classmethod
-    def from_path(cls, path):
-        content = path_to_content(path)
-        return Note(path, content)
+class Vault:
+    """
+    An obsidian vault.
+    """
+    path = None
 
-    def __init__(self, path, content):
+    def __init__(self, path: typing.Union[Path, str]):
+        self.path = path if type(path) == Path else Path(path)
+        assert self.path.is_dir(), f"{self.path} is not a dir"
+
+    def generate_notes(self):
+        """Generate all notes in vault"""
+        for file_path in self.path.rglob("*.md"):
+            rel_path = file_path.relative_to(self.path)
+            yield Note.from_path(self, rel_path)
+
+    def __repr__(self):
+        return f"Vault({self.path=})"
+
+
+class Note:
+    """
+    A markdown-based note.
+    """
+    @classmethod
+    def from_path(cls, vault: Vault, path: Path):
+        path_abs = vault.path.joinpath(path)
+        assert path_abs.is_file(), f"no file found at {path_abs}"
+        content = path_to_content(path_abs)
+        return Note(vault, path, content)
+
+    def __init__(self, vault: Vault, path: Path, content: str):
+        self._vault = vault
         self._path = path
-        self.content = content
+        self._content = content
 
     def get_tags(self):
-        results = re.findall(r"#[A-z0-9]+", self.content)
+        results = re.findall(r"#[A-z0-9]+", self._content)
         return set(results)
 
-    def get_path(self):
+    def get_absolute_path(self):
+        return self._vault.path.joinpath(self._path)
+
+    def get_relative_path(self):
         return self._path
+
+    def get_obsidian_uri(self):
+        return "obsidian://open?" + urlencode({"vault": "notes", "file": self._path})
 
     def get_title(self):
         # todo md title
@@ -28,22 +62,10 @@ class Note:
         return self._path.name.replace(".md", "")
 
     tags = property(get_tags)
-    path = property(get_path)
     title = property(get_title)
 
     def __repr__(self):
-        return f"Note({self.path=})"
-
-
-def gen_notes(path):
-    """Generate all notes in a directory."""
-    home_path = Path(path)
-
-    # check that path exists
-    assert home_path.is_dir()
-
-    for file_path in home_path.rglob("*.md"):
-        yield Note.from_path(file_path)
+        return f"Note({self._vault=}, {self._path=})"
 
 
 def path_to_content(path):
