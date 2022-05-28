@@ -60,16 +60,19 @@ class FeatureUnionDataFrame(TransformerMixin):
 
 
 class NotePathTransformer(TransformerMixin):
+    def __init__(self):
+        self.paths = None
+
     def fit(self, X, y=None):
         self.paths = set()
         for note in X:
-            self.paths.add(note.path.parent)
+            self.paths.add(note.get_relative_path().parent)
         return self
 
     def transform(self, X, y=None):
         df = pd.DataFrame()
         for path in self.paths:
-            df[str(path)] = [x.path.is_relative_to(path) for x in X]
+            df[str(path)] = [x.get_relative_path().is_relative_to(path) for x in X]
         return df
 
     def get_feature_names(self):
