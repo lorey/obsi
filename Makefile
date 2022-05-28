@@ -1,6 +1,6 @@
 .RECIPEPREFIX = >
 
-.PHONY: all test format build up run precommit
+.PHONY: all test format build up run precommit example
 .FORCE:
 
 all: build up run
@@ -37,5 +37,9 @@ requirements.txt: requirements.in
 
 up:
 > docker-compose up -d
+
+example:
+> sudo rm -rf example/output/*
+> make run
 
 precommit: build up test format lint

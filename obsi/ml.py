@@ -79,7 +79,7 @@ class NotePathTransformer(TransformerMixin):
         return [str(p) for p in self.paths]
 
 
-def generate_tag_recommendations(notes, probability_min=0.33):
+def generate_tag_recommendations(notes, probability_min=0.33, min_occurences=3):
     """
     Geneate suggestions for tags.
     :param notes: notes used for training
@@ -89,34 +89,38 @@ def generate_tag_recommendations(notes, probability_min=0.33):
 
     tags = {tag for note in notes for tag in note.tags}
     for tag in tags:
-        pipeline = Pipeline(
-            steps=[
-                # attributes per note:
-                (
-                    "fu",
-                    FeatureUnionDataFrame(
-                        [
-                            # tags
-                            ("tags", NoteToTagTransformer(except_tag=tag)),
-                            # parent folders
-                            ("paths", NotePathTransformer()),
-                            # todo incoming links
-                            # todo outgoing links
-                            # todo words
-                        ]
-                    ),
-                ),
-                ("fa", NMFDataFrame(init="nndsvda")),
-                ("clf", DecisionTreeClassifier(min_samples_leaf=5)),
-                # ("clf", KNeighborsClassifier(n_neighbors=3)),
-            ]
-        )
-
         # train
         df_train = pd.DataFrame(notes, columns=["note"])
         df_train["y"] = [tag in n.tags for n in notes]
         in_count = len(df_train[~df_train["y"]])
-        if in_count > 10:
+        if in_count >= min_occurences:
+            # set up pipeline
+
+            # use biggest no of features possible
+            n_components = min(in_count, len(df_train.columns))
+
+            pipeline = Pipeline(
+                steps=[
+                    # attributes per note:
+                    (
+                        "fu",
+                        FeatureUnionDataFrame(
+                            [
+                                # tags
+                                ("tags", NoteToTagTransformer(except_tag=tag)),
+                                # parent folders
+                                ("paths", NotePathTransformer()),
+                                # todo incoming links
+                                # todo outgoing links
+                                # todo words
+                            ]
+                        ),
+                    ),
+                    ("fa", NMFDataFrame(init="nndsvda", n_components=n_components)),
+                    ("clf", DecisionTreeClassifier(min_samples_leaf=5)),
+                    # ("clf", KNeighborsClassifier(n_neighbors=2)),  # todo reduced for example to n_neighbors=2
+                ]
+            )
             pipeline.fit(df_train["note"].values, df_train["y"])
 
             # predict
@@ -124,10 +128,10 @@ def generate_tag_recommendations(notes, probability_min=0.33):
             prediction_proba = pipeline.predict_proba(df_predict["note"].values)
             df_res = pd.DataFrame(prediction_proba, columns=["out", "in"])
             df_res["note"] = df_predict["note"].values
-
-            notes_in = (
+            notes_in = list(
                 df_res[df_res["in"] > probability_min]
                 .sort_values("in", ascending=False)["note"]
                 .values
             )
-            yield tag, notes_in
+            if notes_in:
+                yield tag, notes_in

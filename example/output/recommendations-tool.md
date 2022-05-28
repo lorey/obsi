@@ -1,0 +1,3 @@
+# #tool
+
+- [obsidian](obsidian.md)
