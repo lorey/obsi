@@ -18,7 +18,7 @@ DAY_GENERATION_PADDING = 100
 WEEK_GENERATION_PADDING = 52
 
 NOTES_PATH = "/notes/"
-
+OUTPUT_PATH = "/output/"
 
 @click.group()
 def cli():
@@ -38,7 +38,7 @@ def anki_deck():
     name = f"Obsi notes for {NOTES_PATH}"
     vault = Vault(NOTES_PATH)
     notes = list(vault.generate_notes())
-    generate_anki_deck(name, notes, out_file="out/deck.apkg")
+    generate_anki_deck(name, notes, out_file=Path(OUTPUT_PATH).joinpath("deck.apkg"))
 
 
 def update_days(padding=DAY_GENERATION_PADDING):
@@ -49,7 +49,7 @@ def update_days(padding=DAY_GENERATION_PADDING):
     for i in range(-padding, padding):
         date = (datetime.now() + timedelta(days=i)).date()
         content = create_day(date)
-        day_path = Path("out").joinpath(day_date_to_path(date))
+        day_path = Path(OUTPUT_PATH).joinpath(day_date_to_path(date))
         if not day_path.is_file():
             day_path.parent.mkdir(parents=True, exist_ok=True)
             with day_path.open("w") as file:
@@ -67,7 +67,7 @@ def update_weeks(padding=WEEK_GENERATION_PADDING):
     for i in range(-padding, padding):
         date = (datetime.now() + timedelta(weeks=i)).date()
         content = create_week(date)
-        week_path = Path("out").joinpath(day_date_to_week_path(date))
+        week_path = Path(OUTPUT_PATH).joinpath(day_date_to_week_path(date))
         if not week_path.is_file():
             week_path.parent.mkdir(parents=True, exist_ok=True)
             with week_path.open("w") as file:
@@ -80,15 +80,16 @@ def update_weeks(padding=WEEK_GENERATION_PADDING):
 def update_recommendations():
     notes = list(get_vault().generate_notes())
     for tag, notes_rec in generate_tag_recommendations(notes):
+        logging.info(f"generate recommendations for {tag}")
         content = create_note_list(tag, notes_rec)
-        with open("out/recommendations-" + tag.lower().replace("#", ""), "w") as file:
-            logging.info(f"generate recommendations for {tag}")
+        filename = f'recommendations-{tag_to_filepart(tag)}.md'
+        with Path(OUTPUT_PATH).joinpath(filename).open('w') as file:
             file.write(content)
 
 
 def update_indexes():
     for filename, content in generate_indexes():
-        path = Path("out/").joinpath(filename)
+        path = Path(OUTPUT_PATH).joinpath(filename)
         with path.open("w") as file:
             logging.info(f"generate index {filename}")
             file.write(content)
@@ -104,17 +105,20 @@ def generate_indexes(untagged_index=True):
         if not note.tags:
             notes_untagged.append(note)
 
-        print(note)
-        print(note.tags)
-        print()
-
     for tag, notes in notes_per_tag.items():
-        filename = "index-" + tag.lower().replace("#", "")
+        filename = f"index-{tag_to_filepart(tag)}.md"
         yield filename, create_index(tag, notes)
 
     if untagged_index:
-        yield "index-untagged", create_index("untagged notes", notes_untagged)
+        yield "index-untagged.md", create_index("untagged notes", notes_untagged)
 
+def tag_to_filepart(tag):
+    """
+    Use a tag as part of a filename.
+    :param tag:
+    :return:
+    """
+    return tag.lower().replace('#', '')
 
 def get_vault():
     return Vault(NOTES_PATH)

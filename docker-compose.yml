@@ -8,5 +8,7 @@ services:
     restart: always
     volumes:
     - ./:/code/
-    # change the part before the colon to your vault
-    - ~/Documents/notes/:/notes/
+    # change the part before the colon to your vault and your desired output directory
+    # if you choose the same directory, make sure to have backups!
+    - ./example/input/:/notes/
+    - ./example/output/:/output/
