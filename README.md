@@ -1,3 +1,5 @@
+![obsi logo](logo.png)
+
 # obsi, supercharge your knowledge base
 This is `obsi`, a command-line tool to supercharge markdown-based knowledge bases.
 Originally used for markdown-based [Obsidian](https://obsidian.md) notes,
