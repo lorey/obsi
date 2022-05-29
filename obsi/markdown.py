@@ -8,12 +8,12 @@ from obsi.storage import day_date_to_path, day_date_to_week_path
 from obsi.util import get_days_in_same_week
 
 
-def create_index(title, notes):
+def render_index(title: str, notes) -> str:
     """creates an index of notes"""
-    return create_note_list(title, notes)
+    return render_note_list(title, notes)
 
 
-def create_note_list(title, notes):
+def render_note_list(title: str, notes: list) -> str:
     """creates a list of notes"""
     env = get_jinja_env()
     index_template = env.get_template("list.md")
@@ -22,7 +22,7 @@ def create_note_list(title, notes):
     )
 
 
-def create_day(date: datetime.date):
+def render_day(date: datetime.date):
     env = get_jinja_env()
     template = env.get_template("day.md")
 
@@ -38,7 +38,7 @@ def create_day(date: datetime.date):
     )
 
 
-def create_week(date: datetime.date):
+def render_week(date: datetime.date):
     env = get_jinja_env()
     template = env.get_template("week.md")
 

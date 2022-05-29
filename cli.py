@@ -10,7 +10,7 @@ from pathlib import Path
 import click
 
 from obsi.anki import generate_anki_deck
-from obsi.markdown import create_day, create_index, create_note_list, create_week
+from obsi.markdown import render_day, render_index, render_note_list, render_week
 from obsi.ml import generate_tag_recommendations
 from obsi.storage import Vault, day_date_to_path, day_date_to_week_path
 
@@ -19,6 +19,9 @@ WEEK_GENERATION_PADDING = 5
 
 NOTES_PATH = "/notes/"
 OUTPUT_PATH = "/output/"
+
+STUB_LENGTH_THRESHOLD = 100
+
 
 @click.group()
 def cli():
@@ -37,6 +40,7 @@ def run():
     update_weeks()
     update_recommendations()
     update_indexes()
+    update_stubs()
 
 
 @cli.command()
@@ -57,7 +61,7 @@ def update_days(padding=DAY_GENERATION_PADDING):
     """
     for i in range(-padding, padding):
         date = (datetime.now() + timedelta(days=i)).date()
-        content = create_day(date)
+        content = render_day(date)
         day_path = Path(OUTPUT_PATH).joinpath(day_date_to_path(date))
         if not day_path.is_file():
             day_path.parent.mkdir(parents=True, exist_ok=True)
@@ -75,7 +79,7 @@ def update_weeks(padding=WEEK_GENERATION_PADDING):
     """
     for i in range(-padding, padding):
         date = (datetime.now() + timedelta(weeks=i)).date()
-        content = create_week(date)
+        content = render_week(date)
         week_path = Path(OUTPUT_PATH).joinpath(day_date_to_week_path(date))
         if not week_path.is_file():
             week_path.parent.mkdir(parents=True, exist_ok=True)
@@ -90,10 +94,9 @@ def update_recommendations():
     notes = list(get_vault().generate_notes())
     for tag, notes_rec in generate_tag_recommendations(notes):
         logging.info(f"generate recommendations for {tag}")
-        content = create_note_list(tag, notes_rec)
-        filename = f'recommendations-{tag_to_filepart(tag)}.md'
-        with Path(OUTPUT_PATH).joinpath(filename).open('w') as file:
-            file.write(content)
+        filename = f"recommendations-{tag_to_filepart(tag)}.md"
+        with Path(OUTPUT_PATH).joinpath(filename).open("w") as file:
+            file.write(render_note_list(tag, notes_rec))
 
 
 def update_indexes():
@@ -116,10 +119,24 @@ def generate_indexes(untagged_index=True):
 
     for tag, notes in notes_per_tag.items():
         filename = f"index-{tag_to_filepart(tag)}.md"
-        yield filename, create_index(tag, notes)
+        yield filename, render_index(tag, notes)
 
     if untagged_index:
-        yield "index-untagged.md", create_index("untagged notes", notes_untagged)
+        yield "index-untagged.md", render_index("untagged notes", notes_untagged)
+
+
+def update_stubs():
+    """
+    This will generate a list of stubs (short notes).
+    """
+    stubs = [
+        note
+        for note in get_vault().generate_notes()
+        if len(note.content) < STUB_LENGTH_THRESHOLD
+    ]
+    with Path(OUTPUT_PATH).joinpath("stubs.md").open("w") as file:
+        file.write(render_note_list("Stubs", stubs))
+
 
 def tag_to_filepart(tag):
     """

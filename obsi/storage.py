@@ -18,7 +18,7 @@ class Vault:
         self.path = path if type(path) == Path else Path(path)
         assert self.path.is_dir(), f"{self.path} is not a dir"
 
-    def generate_notes(self):
+    def generate_notes(self) -> typing.Generator["Note", None, None]:
         """Generate all notes in vault"""
         for file_path in self.path.rglob("*.md"):
             rel_path = file_path.relative_to(self.path)
@@ -34,7 +34,7 @@ class Note:
     """
 
     @classmethod
-    def from_path(cls, vault: Vault, path: Path):
+    def from_path(cls, vault: Vault, path: Path) -> "Note":
         path_abs = vault.path.joinpath(path)
         assert path_abs.is_file(), f"no file found at {path_abs}"
         content = path_to_content(path_abs)
@@ -63,8 +63,12 @@ class Note:
         # todo frontmatter title
         return self._path.name.replace(".md", "")
 
+    def get_content(self):
+        return self._content
+
     tags = property(get_tags)
     title = property(get_title)
+    content = property(get_content)
 
     def __repr__(self):
         return f"Note({self._vault=}, {self._path=})"
