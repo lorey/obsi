@@ -106,6 +106,7 @@ def generate_tag_recommendations(notes, probability_min=0.33, min_occurences=3):
             else:
                 clf = DecisionTreeClassifier(min_samples_leaf=5)
 
+            n_components = int(sqrt(len(df_train)))
             pipeline = Pipeline(
                 steps=[
                     # attributes per note:
@@ -123,7 +124,7 @@ def generate_tag_recommendations(notes, probability_min=0.33, min_occurences=3):
                             ]
                         ),
                     ),
-                    ("fa", NMFDataFrame(init="nndsvda", n_components=int(sqrt(len(df_train))))),
+                    ("fa", NMFDataFrame(init="nndsvda", n_components=n_components)),
                     ("clf", clf),
                 ]
             )

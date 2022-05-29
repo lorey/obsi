@@ -22,11 +22,17 @@ OUTPUT_PATH = "/output/"
 
 @click.group()
 def cli():
+    """
+    This is the obsi command line interface. Use it to work with your vault.
+    """
     print("obsi started")
 
 
 @cli.command()
 def run():
+    """
+    Run all the functionality at once. Just do this if you're unsure, nothing can go wrong.
+    """
     update_days()
     update_weeks()
     update_recommendations()
@@ -35,6 +41,9 @@ def run():
 
 @cli.command()
 def anki_deck():
+    """
+    Generate an (updatable) anki deck for your notes.
+    """
     name = f"Obsi notes for {NOTES_PATH}"
     vault = Vault(NOTES_PATH)
     notes = list(vault.generate_notes())
@@ -118,7 +127,8 @@ def tag_to_filepart(tag):
     :param tag:
     :return:
     """
-    return tag.lower().replace('#', '')
+    return tag.lower().replace("#", "")
+
 
 def get_vault():
     return Vault(NOTES_PATH)
