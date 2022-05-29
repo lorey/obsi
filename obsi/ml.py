@@ -1,6 +1,9 @@
+from math import sqrt
+
 import pandas as pd
 from sklearn.base import TransformerMixin
 from sklearn.decomposition import NMF
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.tree import DecisionTreeClassifier
 
@@ -96,8 +99,12 @@ def generate_tag_recommendations(notes, probability_min=0.33, min_occurences=3):
         if in_count >= min_occurences:
             # set up pipeline
 
-            # use biggest no of features possible
-            n_components = min(in_count, len(df_train.columns))
+            # use knn with small vaults
+            if len(df_train) < 100:
+                # use nearest neighbors as data is wider than long
+                clf = KNeighborsClassifier(n_neighbors=2)
+            else:
+                clf = DecisionTreeClassifier(min_samples_leaf=5)
 
             pipeline = Pipeline(
                 steps=[
@@ -116,9 +123,8 @@ def generate_tag_recommendations(notes, probability_min=0.33, min_occurences=3):
                             ]
                         ),
                     ),
-                    ("fa", NMFDataFrame(init="nndsvda", n_components=n_components)),
-                    ("clf", DecisionTreeClassifier(min_samples_leaf=5)),
-                    # ("clf", KNeighborsClassifier(n_neighbors=2)),  # todo reduced for example to n_neighbors=2
+                    ("fa", NMFDataFrame(init="nndsvda", n_components=int(sqrt(len(df_train))))),
+                    ("clf", clf),
                 ]
             )
             pipeline.fit(df_train["note"].values, df_train["y"])
