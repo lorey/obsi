@@ -47,6 +47,29 @@ def render_week(date: datetime.date):
     return template.render(day_links=day_links)
 
 
+def render_month(year: int, month: int):
+    """
+    Render a monthly note
+    :param year: year
+    :param month: month indexed regularly from 1-12
+    :return: markdown note
+    """
+    env = get_jinja_env()
+    template = env.get_template("month.md")
+
+    return template.render(first_day=datetime.date(year, month, 1))
+
+def render_year(year: int):
+    """
+    Render a yearly note
+    :param year: year
+    :return: markdown note
+    """
+    env = get_jinja_env()
+    template = env.get_template("year.md")
+
+    return template.render(first_day=datetime.date(year, 1, 1))
+
 def get_jinja_env(template_path_raw="templates"):
     template_path = Path(template_path_raw)
     if not template_path.is_dir():

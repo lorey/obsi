@@ -7,10 +7,12 @@ it works with every markdown-based tool for note-taking or digital gardening.
 Examples of generated files from an exemplary vault can be found in the [example](example) directory.
 
 ## Features
-- create Anki Decks from your Obsidian Vault to memorize notes
-- create indexes for tags, i.e. pages that link to all pages with a specific tag
-- generate tag recommendations (based on other tags) with machine learning to make sure all pages are properly tagged
-- generate calendar-related notes: daily, weekly, and monthly notes with respective links for the next years to come so you don't have to manually create notes for daily pages ever again
+Here's what obsi can do.
+
+- Anki decks: create and update Anki Decks from your Obsidian Vault to memorize and re-visit notes.
+- Indexing: create indexes for tags, i.e. pages that link to all pages with a specific tag.
+- Machine Learning Recommendations: get tag recommendations (based on other tags) to make sure all pages are properly tagged.
+- Calendar generation: daily, weekly, monthly, and yearly notes, created from a template you can edit, properly interlinked, for the next years to come. You don't have to manually create notes in your calendar ever again.
 
 while doing this, obsi is:
 - customizable with Jinja-based [templates](templates), so you can adapt everything to your needs
@@ -18,6 +20,11 @@ while doing this, obsi is:
 - fully containerized within Docker, no dependencies needed
 - super careful with your vault and will never overwrite anything
 - tool-independent to make sure, your notes stay truly text-based
+
+## Obsi compared to...
+
+- [Obsidian](https://obsidian.md): Obsidian is a program/app that allows you to interactively work with your markdown-files, it can be extended with many plugins that all run within Obsidian. obsi is command line based and works directly with your files for you. It's basically a text-focused extension of what you can do with Obsidian.
+- [DataView](https://github.com/blacksmithgu/obsidian-dataview): DataView is an Obsidian addon which allows you to dynamically query your vault like a database. The results are shown in Obsidian. The issue is that they are not persisted and can thus not be used without Obsidian, e.g. when not using the app. To me, this was a huge drawback, as I wanted to have my notes tool-independent. Also, its functionality is limited to fetching data, not file-generation or even machine learning applications.
 
 ## Usage
 Get obsi running with these five steps:
@@ -30,10 +37,10 @@ Get obsi running with these five steps:
 
 ## Feature Ideas
 These are a few ideas I'm planning to integrate. Watch this repo to get notified.
+
 - Search Index
 - scheduling of tasks/hooks
 - automated git commits
-- generation of full calendar (days, months, years)
 - suggest tags (content-based, link-based)
 - find missing tags (e.g. by folder structure)
 - spaced repetition by extracting sentences from notes
