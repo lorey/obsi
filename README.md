@@ -26,7 +26,7 @@ Get obsi running with these five steps:
 2. Adapt the [templates](templates) to your needs
 3. Adapt the location of your notes in [docker-compose.yml](docker-compose.yml).
 4. Spin it up with `make`. This will spin up a docker container and read your vault/notes.
-5. Find the generated files in [out/](out/) and copy them into your vault if desired.
+5. Find the generated files in your desired "out" directory, e.g. [example/output](example/output), and copy them into your vault if desired.
 
 ## Feature Ideas
 These are a few ideas I'm planning to integrate. Watch this repo to get notified.

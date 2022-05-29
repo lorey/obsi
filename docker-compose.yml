@@ -10,5 +10,6 @@ services:
     - ./:/code/
     # change the part before the colon to your vault and your desired output directory
     # if you choose the same directory, make sure to have backups!
+    # to be sure, choose an empty output directory and copy manually
     - ./example/input/:/notes/
     - ./example/output/:/output/
