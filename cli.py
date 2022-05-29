@@ -14,8 +14,8 @@ from obsi.markdown import create_day, create_index, create_note_list, create_wee
 from obsi.ml import generate_tag_recommendations
 from obsi.storage import Vault, day_date_to_path, day_date_to_week_path
 
-DAY_GENERATION_PADDING = 100
-WEEK_GENERATION_PADDING = 52
+DAY_GENERATION_PADDING = 10
+WEEK_GENERATION_PADDING = 5
 
 NOTES_PATH = "/notes/"
 OUTPUT_PATH = "/output/"

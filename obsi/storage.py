@@ -77,8 +77,8 @@ def path_to_content(path):
 
 
 def day_date_to_path(day):
-    return "calendar/days/" + day.strftime(DAY_FORMAT)
+    return f"calendar/days/{day.strftime(DAY_FORMAT)}.md"
 
 
 def day_date_to_week_path(day):
-    return "calendar/weeks/" + week_identifier_from_date(day)
+    return f"calendar/weeks/{week_identifier_from_date(day)}.md"
