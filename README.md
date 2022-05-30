@@ -30,6 +30,18 @@ while doing this, obsi is:
 - [Obsidian](https://obsidian.md): Obsidian is a program/app that allows you to interactively work with your markdown-files, it can be extended with many plugins that all run within Obsidian. obsi is command line based and works directly with your files for you. It's basically a text-focused extension of what you can do with Obsidian.
 - [DataView](https://github.com/blacksmithgu/obsidian-dataview): DataView is an Obsidian addon which allows you to dynamically query your vault like a database. The results are shown in Obsidian. The issue is that they are not persisted and can thus not be used without Obsidian, e.g. when not using the app. To me, this was a huge drawback, as I wanted to have my notes tool-independent. Also, its functionality is limited to fetching data, not file-generation or even machine learning applications.
 
+## Calendar
+The calendar functionality generates calendar notes for you.
+The generated calendar is also part of this repo and can be downloaded directly at [example/output/calendar](example/output/calendar) (copy and paste the ones you like to your vault, that's it).
+The following notes are created by default:
+- [yearly notes](templates/year.md) (shown in red)
+- [monthly notes](templates/month.md) (shown in orange)
+- [weekly notes](templates/week.md) (shown in lime)
+- [daily notes](templates/day.md) (shows in green)
+
+![calendar](calendar.png)
+
+
 ## Usage
 Get obsi running with these five steps:
 
