@@ -10,7 +10,14 @@ from pathlib import Path
 import click
 
 from obsi.anki import generate_anki_deck
-from obsi.markdown import render_day, render_index, render_note_list, render_week, render_month, render_year
+from obsi.markdown import (
+    render_day,
+    render_index,
+    render_month,
+    render_note_list,
+    render_week,
+    render_year,
+)
 from obsi.ml import generate_tag_recommendations
 from obsi.storage import Vault, day_date_to_path, day_date_to_week_path
 
@@ -50,22 +57,22 @@ def update_calendar():
     update_years(years=years)
     update_months(years=years)
 
+
 def update_years(years):
     for year in years:
-        year_path = Path(OUTPUT_PATH).joinpath(f'calendar/years/{year}.md')
+        year_path = Path(OUTPUT_PATH).joinpath(f"calendar/years/{year}.md")
         year_path.parent.mkdir(exist_ok=True, parents=True)
-        with year_path.open('w') as file:
+        with year_path.open("w") as file:
             file.write(render_year(year))
+
 
 def update_months(years):
     for year in years:
         for i in range(1, 12):
-            month_path = Path(OUTPUT_PATH).joinpath(f'calendar/months/{year}-{i:02}.md')
+            month_path = Path(OUTPUT_PATH).joinpath(f"calendar/months/{year}-{i:02}.md")
             month_path.parent.mkdir(exist_ok=True, parents=True)
-            month_date_first = datetime(year, i, 1)
-            with month_path.open('w') as file:
+            with month_path.open("w") as file:
                 file.write(render_month(year, i))
-
 
 
 @cli.command()

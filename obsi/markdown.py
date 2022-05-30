@@ -59,6 +59,7 @@ def render_month(year: int, month: int):
 
     return template.render(first_day=datetime.date(year, month, 1))
 
+
 def render_year(year: int):
     """
     Render a yearly note
@@ -69,6 +70,7 @@ def render_year(year: int):
     template = env.get_template("year.md")
 
     return template.render(first_day=datetime.date(year, 1, 1))
+
 
 def get_jinja_env(template_path_raw="templates"):
     template_path = Path(template_path_raw)
