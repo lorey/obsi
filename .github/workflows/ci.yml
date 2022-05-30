@@ -1,0 +1,13 @@
+name: Basic CI
+
+on:
+  push:
+  pull_request:
+    types: [opened, reopened]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: precommit
+        run: make precommit
