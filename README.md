@@ -1,5 +1,9 @@
 ![obsi logo](logo.png)
 
+![continuous integration badge](https://img.shields.io/github/workflow/status/lorey/obsi/ci)
+![language badge](https://img.shields.io/github/languages/top/lorey/obsi)
+![version badge](https://img.shields.io/github/v/tag/lorey/obsi)
+
 # obsi, supercharge your knowledge base
 This is `obsi`, a command-line tool to supercharge markdown-based knowledge bases.
 Originally used for markdown-based [Obsidian](https://obsidian.md) notes,
