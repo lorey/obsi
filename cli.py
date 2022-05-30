@@ -19,7 +19,13 @@ from obsi.markdown import (
     render_year,
 )
 from obsi.ml import generate_tag_recommendations
-from obsi.storage import Vault, day_date_to_path, day_date_to_week_path
+from obsi.storage import (
+    Vault,
+    day_date_to_path,
+    day_date_to_week_path,
+    get_month_link,
+    get_year_link,
+)
 
 DAY_GENERATION_PADDING = 10
 WEEK_GENERATION_PADDING = 5
@@ -60,19 +66,19 @@ def update_calendar():
 
 def update_years(years):
     for year in years:
-        year_path = Path(OUTPUT_PATH).joinpath(f"calendar/years/{year}.md")
+        year_path = Path(OUTPUT_PATH).joinpath(get_year_link(year))
         year_path.parent.mkdir(exist_ok=True, parents=True)
         with year_path.open("w") as file:
-            file.write(render_year(year))
+            file.write(render_year(year, get_year_uri=get_year_link))
 
 
 def update_months(years):
     for year in years:
-        for i in range(1, 12):
-            month_path = Path(OUTPUT_PATH).joinpath(f"calendar/months/{year}-{i:02}.md")
+        for month in range(1, 13):
+            month_path = Path(OUTPUT_PATH).joinpath(get_month_link(year, month))
             month_path.parent.mkdir(exist_ok=True, parents=True)
             with month_path.open("w") as file:
-                file.write(render_month(year, i))
+                file.write(render_month(year, month, get_month_link, get_year_link))
 
 
 @cli.command()

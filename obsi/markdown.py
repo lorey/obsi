@@ -1,11 +1,12 @@
 import datetime
+import typing
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
 from obsi import DAY_FORMAT, MONTH_FORMAT
 from obsi.storage import day_date_to_path, day_date_to_week_path
-from obsi.util import get_days_in_same_week
+from obsi.util import get_days_in_same_week, week_identifier_from_date
 
 
 def render_index(title: str, notes) -> str:
@@ -31,6 +32,7 @@ def render_day(date: datetime.date):
 
     return template.render(
         title=date.strftime(DAY_FORMAT),
+        date=date,
         yesterday_path=day_date_to_path(yesterday),
         tomorrow_path=day_date_to_path(tomorrow),
         week_path=day_date_to_week_path(date),
@@ -44,32 +46,63 @@ def render_week(date: datetime.date):
 
     days = get_days_in_same_week(date)
     day_links = {d.strftime("%A, " + DAY_FORMAT): day_date_to_path(d) for d in days}
-    return template.render(day_links=day_links)
+    return template.render(title=week_identifier_from_date(date), day_links=day_links)
 
 
-def render_month(year: int, month: int):
+def render_month(
+    year: int,
+    month: int,
+    get_month_uri: typing.Callable[[int, int], str],
+    get_year_uri: typing.Callable[[int], str],
+):
     """
     Render a monthly note
     :param year: year
     :param month: month indexed regularly from 1-12
+    :param get_month_uri: callable to generate month link
+    :param get_year_uri: callable to generate year link
     :return: markdown note
     """
     env = get_jinja_env()
     template = env.get_template("month.md")
 
-    return template.render(first_day=datetime.date(year, month, 1))
+    next_month_date = datetime.date(year, month, 1) + datetime.timedelta(days=31)
+    last_month_date = datetime.date(year, month, 1) - datetime.timedelta(days=1)
+    return template.render(
+        first_day=datetime.date(year, month, 1),
+        last_month_link=f"[last month]({get_month_uri(last_month_date.year, last_month_date.month)})",
+        next_month_link=f"[next month]({get_month_uri(next_month_date.year, next_month_date.month)})",
+        year_link=f"[year]({get_year_uri(year)})",
+    )
 
 
-def render_year(year: int):
+def render_year(
+    year: int,
+    get_year_uri: typing.Callable[[int], str],
+):
     """
     Render a yearly note
     :param year: year
+    :param get_year_uri:
     :return: markdown note
     """
     env = get_jinja_env()
     template = env.get_template("year.md")
 
-    return template.render(first_day=datetime.date(year, 1, 1))
+    return template.render(
+        first_day=datetime.date(year, 1, 1),
+        previous_year_link=render_markdown_link(get_year_uri(year - 1), "last year"),
+        next_year_link=render_markdown_link(get_year_uri(year + 1), "last year"),
+    )
+
+
+def render_markdown_link(uri, title=None):
+    """
+    create a hyperlink from a title and a path.
+    :param title: title of the link
+    :param uri: uri
+    """
+    return f"[{title if title else 'link'}]({uri})"
 
 
 def get_jinja_env(template_path_raw="templates"):

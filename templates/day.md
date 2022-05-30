@@ -1,4 +1,4 @@
-# {{ title }}
+# {{ date.strftime('%A, %B %d, %Y') }}
 
 ## Focus
 1. MAIN GOAL
@@ -7,19 +7,20 @@
 
 ## Log
 What happened?
-- 11:15 neighbor rang the door
+- 11:15 (insert what happened here)
 
 ## Notes
-- quite tired
+- (other stuff to keep track of)
 
 # Review
-Today was quite productive.
+How did you feel overall? What went good, what went bad?
 
 - My mood was...
 - I'm tankful for...
 - I'm looking forward to...
 - I could have made today better by...
-
+- I talked to...
+ 
 ## Links
 - [yesterday]({{ yesterday_path }})
 - [tomorrow]({{ tomorrow_path }})

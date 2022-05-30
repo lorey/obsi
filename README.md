@@ -31,8 +31,8 @@ while doing this, obsi is:
 - [DataView](https://github.com/blacksmithgu/obsidian-dataview): DataView is an Obsidian addon which allows you to dynamically query your vault like a database. The results are shown in Obsidian. The issue is that they are not persisted and can thus not be used without Obsidian, e.g. when not using the app. To me, this was a huge drawback, as I wanted to have my notes tool-independent. Also, its functionality is limited to fetching data, not file-generation or even machine learning applications.
 
 ## Calendar
-The calendar functionality generates calendar notes for you.
-The generated calendar is also part of this repo and can be downloaded directly at [example/output/calendar](example/output/calendar) (copy and paste the ones you like to your vault, that's it).
+The calendar functionality generates calendar notes for you based on the templates provided.
+The calendar generated with the default templates is also part of this repo and can be downloaded directly at [example/output/calendar](example/output/calendar) (copy and paste the notes you like to your vault, that's it).
 The following notes are created by default:
 - [yearly notes](templates/year.md) (shown in red)
 - [monthly notes](templates/month.md) (shown in orange)

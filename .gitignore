@@ -1,1 +1,2 @@
-out/
+# ignore obsidian files in output directory (created when testing)
+example/output/.obsidian

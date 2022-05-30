@@ -86,3 +86,11 @@ def day_date_to_path(day):
 
 def day_date_to_week_path(day):
     return f"calendar/weeks/{week_identifier_from_date(day)}.md"
+
+
+def get_month_link(year, month):
+    return f"calendar/months/{year}-{month:02}.md"
+
+
+def get_year_link(year):
+    return f"calendar/years/{year}.md"
