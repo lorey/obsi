@@ -56,6 +56,7 @@ class Note:
         return self._path
 
     def get_obsidian_uri(self):
+        # todo fix hardcoded vault name
         return "obsidian://open?" + urlencode({"vault": "notes", "file": self._path})
 
     def get_title(self):

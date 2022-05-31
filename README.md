@@ -10,7 +10,13 @@ Originally used for markdown-based [Obsidian](https://obsidian.md) notes,
 it works with every markdown-based tool for note-taking or digital gardening.
 Examples of generated files from an exemplary vault can be found in the [example](example) directory.
 
+## Obsi compared to...
+
+- [Obsidian](https://obsidian.md): Obsidian is a program/app that allows you to interactively work with your markdown-files, it can be extended with many plugins that all run within Obsidian. obsi is command line based and works directly with your files for you. It's basically a text-focused extension of what you can do with Obsidian.
+- [DataView](https://github.com/blacksmithgu/obsidian-dataview): DataView is an Obsidian addon which allows you to dynamically query your vault like a database. The results are shown in Obsidian. The issue is that they are not persisted and can thus not be used without Obsidian, e.g. when not using the app. To me, this was a huge drawback, as I wanted to have my notes tool-independent. Also, its functionality is limited to fetching data, not file-generation or even machine learning applications.
+
 ## Features
+
 Here's what obsi can do.
 
 - Anki decks: create and update Anki Decks from your Obsidian Vault to memorize and re-visit notes.
@@ -25,12 +31,8 @@ while doing this, obsi is:
 - super careful with your vault and will never overwrite anything
 - tool-independent to make sure, your notes stay truly text-based
 
-## Obsi compared to...
+### Calendar generation
 
-- [Obsidian](https://obsidian.md): Obsidian is a program/app that allows you to interactively work with your markdown-files, it can be extended with many plugins that all run within Obsidian. obsi is command line based and works directly with your files for you. It's basically a text-focused extension of what you can do with Obsidian.
-- [DataView](https://github.com/blacksmithgu/obsidian-dataview): DataView is an Obsidian addon which allows you to dynamically query your vault like a database. The results are shown in Obsidian. The issue is that they are not persisted and can thus not be used without Obsidian, e.g. when not using the app. To me, this was a huge drawback, as I wanted to have my notes tool-independent. Also, its functionality is limited to fetching data, not file-generation or even machine learning applications.
-
-## Calendar
 The calendar functionality generates calendar notes for you based on the templates provided.
 The calendar generated with the default templates is also part of this repo and can be downloaded directly at [example/output/calendar](example/output/calendar) (copy and paste the notes you like to your vault, that's it).
 The following notes are created by default:
@@ -42,7 +44,31 @@ The following notes are created by default:
 ![calendar](calendar.png)
 
 
+### Anki decks
+Anki decks can get created in two ways.
+1. ...from files, so the note becomes a card itself. You don't have to do anything, it happends automatically for every note.
+2. ...by creating cards within markdown. You can put cards anywhere inside a markdown file and have as many as you want inside one file. The syntax is described below.
+
+Regular Q&A card:
+````
+```obsi
+Q: Who is the author of obsi?
+A: Karl Lorey
+```
+````
+will result in one anki card with 'Who is the author of obsi?' as question and 'Karl Lorey' as the answer.
+
+Regular and reversed card:
+````
+```obsi
+Q: obsi
+Q: tool to supercharge your markdown knowledge base
+```
+````
+will result in two cards. One with the first Q as question and the second Q as answer. And one reversed card.
+
 ## Usage
+
 Get obsi running with these five steps:
 
 1. Fork and then clone this repo to your local machine
