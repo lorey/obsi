@@ -5,7 +5,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
 from obsi import DAY_FORMAT, MONTH_FORMAT
-from obsi.storage import day_date_to_path, day_date_to_week_path
+from obsi.storage import day_date_to_path, day_date_to_week_path, get_day_of_year_path
 from obsi.util import get_days_in_same_week, week_identifier_from_date
 
 
@@ -33,11 +33,21 @@ def render_day(date: datetime.date):
     return template.render(
         title=date.strftime(DAY_FORMAT),
         date=date,
+        date_of_year_path=get_day_of_year_path(date),
         yesterday_path=day_date_to_path(yesterday),
         tomorrow_path=day_date_to_path(tomorrow),
         week_path=day_date_to_week_path(date),
         month_path=f"calendar/months/{date.strftime(MONTH_FORMAT)}",
     )
+
+
+def render_day_of_year(month, day):
+    env = get_jinja_env()
+    template = env.get_template("day-of-year.md")
+
+    pseudo_date = datetime.date(2020, month, day)
+    wikipedia_url = f'https://en.wikipedia.org/wiki/{pseudo_date.strftime("%B")}_{pseudo_date.strftime(pseudo_date.strftime("%d"))}'
+    return template.render(pseudo_date=pseudo_date, wikipedia_url=wikipedia_url)
 
 
 def render_week(date: datetime.date):

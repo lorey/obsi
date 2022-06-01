@@ -12,6 +12,7 @@ import click
 from obsi.anki import generate_anki_deck
 from obsi.markdown import (
     render_day,
+    render_day_of_year,
     render_index,
     render_month,
     render_note_list,
@@ -23,8 +24,9 @@ from obsi.storage import (
     Vault,
     day_date_to_path,
     day_date_to_week_path,
-    get_month_link,
-    get_year_link,
+    get_day_of_year_path,
+    get_month_path,
+    get_year_path,
 )
 
 DAY_GENERATION_PADDING = 10
@@ -59,26 +61,38 @@ def update_calendar():
     years = range(2000, 2030)
 
     update_days()
+    update_days_of_year()
     update_weeks()
     update_years(years=years)
     update_months(years=years)
 
 
+def update_days_of_year():
+    # chose the last gap year (2020) to loop through all days in a gap year
+    first_day_in_gap_year = datetime(2020, 1, 1)
+    for i in range(366):
+        pseudo_date = first_day_in_gap_year + timedelta(days=i)
+        doy_path = Path(OUTPUT_PATH).joinpath(get_day_of_year_path(pseudo_date))
+        doy_path.parent.mkdir(exist_ok=True, parents=True)
+        with doy_path.open("w") as file:
+            file.write(render_day_of_year(pseudo_date.month, pseudo_date.day))
+
+
 def update_years(years):
     for year in years:
-        year_path = Path(OUTPUT_PATH).joinpath(get_year_link(year))
+        year_path = Path(OUTPUT_PATH).joinpath(get_year_path(year))
         year_path.parent.mkdir(exist_ok=True, parents=True)
         with year_path.open("w") as file:
-            file.write(render_year(year, get_year_uri=get_year_link))
+            file.write(render_year(year, get_year_uri=get_year_path))
 
 
 def update_months(years):
     for year in years:
         for month in range(1, 13):
-            month_path = Path(OUTPUT_PATH).joinpath(get_month_link(year, month))
+            month_path = Path(OUTPUT_PATH).joinpath(get_month_path(year, month))
             month_path.parent.mkdir(exist_ok=True, parents=True)
             with month_path.open("w") as file:
-                file.write(render_month(year, month, get_month_link, get_year_link))
+                file.write(render_month(year, month, get_month_path, get_year_path))
 
 
 @cli.command()

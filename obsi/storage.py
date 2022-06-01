@@ -3,7 +3,7 @@ import typing
 from pathlib import Path
 from urllib.parse import urlencode
 
-from obsi import DAY_FORMAT
+from obsi import DAY_FORMAT, DAY_OF_YEAR_FORMAT
 from obsi.util import week_identifier_from_date
 
 
@@ -85,13 +85,17 @@ def day_date_to_path(day):
     return f"calendar/days/{day.strftime(DAY_FORMAT)}.md"
 
 
+def get_day_of_year_path(date):
+    return f"calendar/days-of-year/{date.strftime(DAY_OF_YEAR_FORMAT)}.md"
+
+
 def day_date_to_week_path(day):
     return f"calendar/weeks/{week_identifier_from_date(day)}.md"
 
 
-def get_month_link(year, month):
+def get_month_path(year, month):
     return f"calendar/months/{year}-{month:02}.md"
 
 
-def get_year_link(year):
+def get_year_path(year):
     return f"calendar/years/{year}.md"

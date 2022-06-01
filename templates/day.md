@@ -24,5 +24,6 @@ How did you feel overall? What went good, what went bad?
 ## Links
 - [yesterday]({{ yesterday_path }})
 - [tomorrow]({{ tomorrow_path }})
+- [day of year]({{ date_of_year_path }})
 - [week]({{ week_path }})
 - [month]({{ month_path }})
