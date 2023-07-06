@@ -94,7 +94,7 @@ pyyaml==6.0
     # via genanki
 scikit-learn==1.1.1
     # via -r requirements.in
-scipy==1.8.1
+scipy==1.10.0
     # via scikit-learn
 six==1.16.0
     # via python-dateutil
@@ -102,16 +102,8 @@ threadpoolctl==3.1.0
     # via scikit-learn
 tomli==2.0.1
     # via
-    #   black
-    #   coverage
     #   pep517
-    #   pylint
     #   pytest
-typing-extensions==4.2.0
-    # via
-    #   astroid
-    #   black
-    #   pylint
 wheel==0.37.1
     # via pip-tools
 wrapt==1.14.1
